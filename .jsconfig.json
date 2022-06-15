@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "components": [
+        "./public/components/*'"
+      ],
+      "lib/*": [
+        "./public/lib/*'"
+      ],
+			"/vvv": [
+				"./public/vvv.js'"
+			]
+    }
+  }
+}
