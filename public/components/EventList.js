@@ -14,13 +14,18 @@ const create = ({ parent, events }) => {
       })
     ),
   });
-  parent.appendChild(list);
+  list.data_events = window.structuredClone(events);
   return list;
 };
 
 const update = ({ eventList, events }) => {
-  eventList.innerHTML = "";
-  create({ parent: eventList, events });
+  console.time();
+  for (let event of events) {
+  }
+  eventList.parentElement.insertBefore(newEventList, eventList);
+  eventList.remove();
+  console.timeEnd();
+  return newEventList;
 };
 
 /**
@@ -28,8 +33,9 @@ const update = ({ eventList, events }) => {
  */
 export const EventList = ({ parent, events, eventList }) => {
   if (eventList) {
-    console.log(eventList, events);
     return update({ eventList, events });
   }
-  return create({ parent, events });
+  eventList = create({ events });
+  parent.appendChild(eventList);
+  return eventList;
 };

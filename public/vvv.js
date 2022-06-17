@@ -1,9 +1,12 @@
 export const createElement = (tag, props, children) => {
   const element = document.createElement(tag);
   element.v_listeners = [];
+  let parentElement = null;
   for (let prop in props) {
     let value = props[prop];
-    if (prop === "children") {
+    if (prop === "parentElement") {
+      parentElement = value;
+    } else if (prop === "children") {
       children = value;
       children.forEach((child) => {
         if (typeof child === "string") {
@@ -30,6 +33,9 @@ export const createElement = (tag, props, children) => {
       });
       element.parentNode?.removeChild(element);
     };
+  }
+  if (parentElement) {
+    parentElement.appendChild(element);
   }
   return element;
 };
