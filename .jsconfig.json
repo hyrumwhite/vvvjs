@@ -7,8 +7,8 @@
       "lib/*": [
         "./public/lib/*'"
       ],
-			"/vvv": [
-				"./public/vvv.js'"
+			"/public": [
+				"./public/*'"
 			]
     }
   }
