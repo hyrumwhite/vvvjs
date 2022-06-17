@@ -33,7 +33,7 @@ const update = ({ eventList, events }) => {
 /**
  * @param {{parent: HTMLElement, events: Array<{name: string, description:string}>}} param0
  */
-export const EventList = ({ parent, events, eventList }) => {
+export const EventList = ({ parent, events = [], eventList }) => {
 	if (eventList) {
 		return update({ eventList, events });
 	}
