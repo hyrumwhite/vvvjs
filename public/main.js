@@ -9,9 +9,7 @@ div({
 	children: [
 		button({
 			textContent: "Refresh",
-			click() {
-				getEvents();
-			},
+			click: getEvents,
 		}),
 	],
 });
