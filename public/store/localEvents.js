@@ -6,8 +6,8 @@ const data = {
 const gotEventsKey = Events.createEventKey("gotEvents");
 
 export const eventsChanged = (callback) => {
-  callback(data.events);
   Events.addEventHandler(gotEventsKey, callback);
+  return callback(data.events);
 };
 
 export const getEvents = async () => {
