@@ -33,7 +33,7 @@ const update = ({ eventList, events }) => {
 /**
  * @param {{parent: HTMLElement, events: Array<{name: string, description:string}>}} param0
  */
-export const newEventList = ({ parent, events = [], eventList }) => {
+const newEventList = ({ parent, events = [], eventList }) => {
   if (eventList) {
     return update({ eventList, events });
   }
@@ -42,6 +42,11 @@ export const newEventList = ({ parent, events = [], eventList }) => {
   return eventList;
 };
 
+/**
+ *
+ * @param {Function} onEventsChange
+ * @returns {HTMLElement}
+ */
 export const EventList = (onEventsChange) => {
   let eventList = null;
   eventList = onEventsChange((events) => newEventList({ events, eventList }));

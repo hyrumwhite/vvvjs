@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
+    "target":"es2020",
     "paths": {
-      "components": [
-        "./public/components/*'"
+      "\/vvv": [
+        "./public/vvv.js*"
       ],
-      "lib/*": [
-        "./public/lib/*'"
+      "/components": [
+        "./public/components/*'"
       ],
 			"/public": [
 				"./public/*'"
