@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"target": "es6",
+		"paths": {
+			"/components/*": [
+				"./public/components/*"
+			],
+			"/vvv": [
+				"./public/vvv.js"
+			],
+			"/store": [
+				"./public/store/*"
+			],
+		},
+	},
+	"exclude": [
+		"node_modules",
+		"dist",
+		"slack_integration",
+		"unicode-files"
+	]
+}

@@ -19,6 +19,17 @@ app.get("/components/:name", (req, res) => {
 		});
 	}
 });
+app.get("/store/:name", (req, res) => {
+	//set content type header to javascript
+	res.setHeader("Content-Type", "application/javascript");
+	if (req.params.name.endsWith(".js")) {
+		res.sendFile(`public/store/${req.params.name}`, { root: __dirname });
+	} else {
+		res.sendFile(`public/store/${req.params.name}.js`, {
+			root: __dirname,
+		});
+	}
+});
 app.get("/public/:name", (req, res) => {
 	//set content type header to javascript
 	res.setHeader("Content-Type", "application/javascript");

@@ -2,53 +2,53 @@ import v, { updateList } from "/vvv";
 const { ul, li, input } = v;
 
 const listItem = (event) =>
-  li({
-    children: [
-      input({
-        type: "checkbox",
-      }),
-      event.name,
-    ],
-  });
+	li({
+		children: [
+			input({
+				type: "checkbox",
+			}),
+			event.name,
+		],
+	});
 
 const create = ({ events }) => {
-  let list = ul({
-    children: events.map(listItem),
-  });
-  list.data_events = window.structuredClone(events);
-  return list;
+	let list = ul({
+		children: events.map(listItem),
+	});
+	list.data_events = window.structuredClone(events);
+	return list;
 };
 
 const update = ({ eventList, events }) => {
-  return updateList(eventList, events, {
-    createChild(event) {
-      return listItem(event);
-    },
-    updateChild(child, event) {
-      child.childNodes[1].nodeValue = event.name;
-    },
-  });
+	return updateList(eventList, events, {
+		createChild(event) {
+			return listItem(event);
+		},
+		updateChild(child, event) {
+			child.childNodes[1].nodeValue = event.name;
+		},
+	});
 };
 
 /**
  * @param {{parent: HTMLElement, events: Array<{name: string, description:string}>}} param0
  */
 const newEventList = ({ parent, events = [], eventList }) => {
-  if (eventList) {
-    return update({ eventList, events });
-  }
-  eventList = create({ events });
-  parent?.appendChild(eventList);
-  return eventList;
+	if (eventList) {
+		return update({ eventList, events });
+	}
+	eventList = create({ events });
+	parent?.appendChild(eventList);
+	return eventList;
 };
 
 /**
- *
- * @param {Function} onEventsChange
+ * Accepts a change event function and returns an HTML Element
+ * @param {function(): HTMLElement} onEventsChange
  * @returns {HTMLElement}
  */
 export const EventList = (onEventsChange) => {
-  let eventList = null;
-  eventList = onEventsChange((events) => newEventList({ events, eventList }));
-  return eventList;
+	let eventList = null;
+	eventList = onEventsChange((events) => newEventList({ events, eventList }));
+	return eventList;
 };
