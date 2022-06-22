@@ -3,8 +3,8 @@ import v from "./vvv";
 const { div, button, ul } = v;
 import { EventList } from "/components/EventList.js";
 
-let eventList = null;
-eventList = eventsChanged((events) => EventList({ events, eventList }));
+// let eventList = null;
+// eventList = eventsChanged((events) => EventList({ events, eventList }));
 
 div({
   parentElement: document.body,
@@ -14,6 +14,7 @@ div({
       textContent: "Refresh",
       click: getEvents,
     }),
-    eventList,
+    EventList(eventsChanged),
+    EventList(eventsChanged),
   ],
 });

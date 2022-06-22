@@ -33,7 +33,7 @@ const update = ({ eventList, events }) => {
 /**
  * @param {{parent: HTMLElement, events: Array<{name: string, description:string}>}} param0
  */
-export const EventList = ({ parent, events = [], eventList }) => {
+export const newEventList = ({ parent, events = [], eventList }) => {
   if (eventList) {
     return update({ eventList, events });
   }
@@ -42,9 +42,8 @@ export const EventList = ({ parent, events = [], eventList }) => {
   return eventList;
 };
 
-export const keepUpdated = () => {
+export const EventList = (onEventsChange) => {
   let eventList = null;
-  return () => {
-    eventList = eventsChanged((events) => EventList({ events, eventList }));
-  };
+  eventList = onEventsChange((events) => newEventList({ events, eventList }));
+  return eventList;
 };
