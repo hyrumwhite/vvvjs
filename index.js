@@ -1,7 +1,6 @@
 const [, , PORT = 3334] = process.argv;
-const express = require("express");
-const app = express();
-app.use(express.static("public"));
+const pureHttp = require("pure-http");
+const app = pureHttp();
 
 app.get("/vvv", (req, res) => {
 	//set content type header to javascript
@@ -110,6 +109,16 @@ app.get("/events", (req, res) => {
 	//send a random amount of events
 	let amount = Math.floor(Math.random() * data.length) || 1;
 	res.send(data.slice(0, amount));
+});
+
+app.get("*", (req, res) => {
+	let path = `public`;
+	if (req.url === "/") {
+		path += `/index.html`;
+	} else {
+		path += req.url;
+	}
+	res.sendFile(path, { root: __dirname });
 });
 
 app.listen(PORT);
