@@ -1,125 +1,53 @@
 const [, , PORT = 3334] = process.argv;
+const { fakeEventList } = require("./fake-event-list");
+const fs = require("fs/promises");
 const pureHttp = require("pure-http");
 const app = pureHttp();
 
+//servce static files in the public directory
+const servePublicFiles = async (req, res) => {
+  let filePath = `public${req.url}`;
+  const ext = filePath.split(".").pop();
+  try {
+    if (filePath === "public/") {
+      filePath += "index.html";
+    }
+    //test if filePath is directory
+    const stats = await fs.stat(filePath);
+    if (stats.isDirectory()) {
+      filePath += "/index.js";
+    }
+    //get file extension
+    if (!ext) {
+      filePath += ".js";
+    }
+    await fs.access(filePath);
+    res.sendFile(filePath, { root: __dirname });
+  } catch (err) {
+    //file doesn't exist
+    if (ext) {
+      res.status(404).send("File not found");
+    } else {
+      res.sendFile("public/index.html", { root: __dirname });
+    }
+  }
+};
+
 app.get("/vvv", (req, res) => {
-	//set content type header to javascript
-	res.setHeader("Content-Type", "application/javascript");
-	res.sendFile(`public/vvv.js`, { root: __dirname });
-});
-app.get("/components/:name", (req, res) => {
-	//set content type header to javascript
-	res.setHeader("Content-Type", "application/javascript");
-	if (req.params.name.endsWith(".js")) {
-		res.sendFile(`public/components/${req.params.name}`, { root: __dirname });
-	} else {
-		res.sendFile(`public/components/${req.params.name}.js`, {
-			root: __dirname,
-		});
-	}
-});
-app.get("/store/:name", (req, res) => {
-	//set content type header to javascript
-	res.setHeader("Content-Type", "application/javascript");
-	if (req.params.name.endsWith(".js")) {
-		res.sendFile(`public/store/${req.params.name}`, { root: __dirname });
-	} else {
-		res.sendFile(`public/store/${req.params.name}.js`, {
-			root: __dirname,
-		});
-	}
-});
-app.get("/public/:name", (req, res) => {
-	//set content type header to javascript
-	res.setHeader("Content-Type", "application/javascript");
-	if (req.params.name.endsWith(".js")) {
-		res.sendFile(`public/${req.params.name}`, { root: __dirname });
-	} else {
-		res.sendFile(`public/${req.params.name}.js`, {
-			root: __dirname,
-		});
-	}
+  res.sendFile(`public/vvv.js`, { root: __dirname });
 });
 
 app.get("/events", (req, res) => {
-	let data = [
-		{
-			name: "Movies in the park",
-			date: Date.now(),
-			id: 1,
-			description: "its going to be fun",
-		},
-		{
-			name: "Mozart Concert",
-			date: Date.now(),
-			id: 2,
-			description: "its going to be fun",
-		},
-		{
-			name: "Rave",
-			date: Date.now(),
-			id: 3,
-			description: "its going to be fun",
-		},
-		{
-			name: "Masonic Lodge Open House",
-			date: Date.now(),
-			id: 4,
-			description: "its going to be fun",
-		},
-		{
-			name: "Chocolate Tasting",
-			date: Date.now(),
-			id: 5,
-			description: "its going to be fun",
-		},
-		{
-			name: "Fishing",
-			date: Date.now(),
-			id: 6,
-			description: "its going to be fun",
-		},
-		{
-			name: "Electric Eel Petting Zoo",
-			date: Date.now(),
-			id: 7,
-			description: "its going to be fun",
-		},
-		{
-			name: "Banana Picking",
-			date: Date.now(),
-			id: 8,
-			description: "its going to be fun",
-		},
-		{
-			name: "Pie Eating Contest",
-			date: Date.now(),
-			id: 9,
-			description: "its going to be fun",
-		},
-		{
-			name: "Yoga",
-			date: Date.now(),
-			id: 10,
-			description: "its going to be fun",
-		},
-	];
-	//randomly shuffle the events
-	data = data.sort(() => Math.random() - 0.5);
-	//send a random amount of events
-	let amount = Math.floor(Math.random() * data.length) || 1;
-	res.send(data.slice(0, amount));
+  let data = fakeEventList;
+  //randomly shuffle the events
+  data = data.sort(() => Math.random() - 0.5);
+  //send a random amount of events
+  let amount = Math.floor(Math.random() * data.length) || 1;
+  res.send(data.slice(0, amount));
 });
 
-app.get("*", (req, res) => {
-	let path = `public`;
-	if (req.url === "/") {
-		path += `/index.html`;
-	} else {
-		path += req.url;
-	}
-	res.sendFile(path, { root: __dirname });
-});
+app.get("*", servePublicFiles);
 
 app.listen(PORT);
-console.log(`Server running on port ${PORT}`);
+//log link to server
+console.log(`Server running at http://localhost:${PORT}`);
