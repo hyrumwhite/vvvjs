@@ -1,13 +1,15 @@
 import { events } from "/vvv";
-const data = {
+
+export const state = {
 	events: [],
+	totalEvents: 0,
 };
 
 const gotEventsKey = events.createEventKey("gotEvents");
 
 export const eventsChanged = (callback) => {
 	events.addEventHandler(gotEventsKey, callback);
-	return callback(data.events);
+	return callback(state.events);
 };
 
 export const getEvents = async () => {
@@ -15,7 +17,8 @@ export const getEvents = async () => {
 	if (!response.ok) {
 		throw new Error(`Could not fetch events`);
 	}
-	data.events = await response.json();
-	events.dispatchEvent(gotEventsKey, data.events);
-	return data.events;
+	state.events = await response.json();
+	state.totalEvents = state.events.length;
+	events.dispatchEvent(gotEventsKey, state.events);
+	return state.events;
 };
