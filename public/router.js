@@ -11,7 +11,7 @@
  * @typedef {function(): Promise | undefined} GuardFunction
  */
 
-const checkForRouteMatch = (path, route) => {
+const checkForRouteMatch = (path, route = "") => {
 	if (path.endsWith("/")) {
 		path = path.slice(0, -1);
 	}
@@ -21,8 +21,10 @@ const checkForRouteMatch = (path, route) => {
 	let routeParts = route.split("/");
 	let pathParts = path.split("/");
 	let params = {};
+	console.log(routeParts, pathParts);
 	if (routeParts.length != pathParts.length) {
-		return null;
+		console.log("here??");
+		return { match: false };
 	}
 	for (let i = 0; i < routeParts.length; i++) {
 		let routePart = routeParts[i];
@@ -42,15 +44,15 @@ const handleURLChange = async () => {
 		new URLSearchParams(window.location.search)
 	);
 	let matchingRoute = null;
-
+	let matchingRouteParams = null;
 	for (let route of routes) {
 		if (route.default) {
 			matchingRoute = route;
 		}
-		let { match, params } = checkForRouteMatch(path, route);
-		params = { ...queryParams, ...params };
+		let { match, params } = checkForRouteMatch(path, route.path);
+		matchingRouteParams = { ...queryParams, ...params };
 		if (match) {
-			matchingRoute = route.component;
+			matchingRoute = route;
 			break;
 		}
 	}
@@ -59,7 +61,7 @@ const handleURLChange = async () => {
 		let guardPayload = {
 			route: matchingRoute,
 			path,
-			params,
+			params: matchingRouteParams,
 			query: queryParams,
 		};
 		if (beforeEach) {
@@ -69,12 +71,13 @@ const handleURLChange = async () => {
 			await matchingRoute.before(guardPayload);
 		}
 		let { component, outlet } = matchingRoute;
+		console.log(typeof matchingRoute);
 		outlet = outlet || currentOutlet;
 		if (typeof outlet === "string") {
 			outlet = document.querySelector(outlet);
 		}
 		currentOutlet.innerHTML = "";
-		let element = component(params);
+		let element = component(matchingRouteParams);
 		if (element instanceof Promise) {
 			await component;
 		} else {
@@ -112,7 +115,11 @@ let afterEach = null;
  * 	guards: {beforeEach: GuardFunction, afterEach: GuardFunction}
  * }} param0
  */
-export const init = ({ routes: newRoutes, outlet, guards = {} }) => {
+export const initializeRouter = ({
+	routes: newRoutes,
+	outlet,
+	guards = {},
+}) => {
 	currentOutlet = outlet;
 	routes = newRoutes;
 
@@ -127,10 +134,14 @@ export const init = ({ routes: newRoutes, outlet, guards = {} }) => {
 
 /**
  * Navigate to a given route
- * @param {{path: String, name: String, params: Object<any>, delta: number}}} param0
+ * @param {{path: String, name: String, params: Object<any>, delta: number} | string} param0
  * @returns undefined
  */
-export const go = ({ path, name, params, query, delta }) => {
+export const go = (arg) => {
+	if (typeof arg === "string") {
+		arg = { path: arg };
+	}
+	const { path, name, params, query, delta } = arg;
 	if (delta) {
 		return window.history.go(delta);
 	}
