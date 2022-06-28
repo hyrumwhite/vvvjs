@@ -1,12 +1,12 @@
-import { Events } from "/vvv";
+import { events } from "/vvv";
 const data = {
   events: [],
 };
 
-const gotEventsKey = Events.createEventKey("gotEvents");
+const gotEventsKey = events.createEventKey("gotEvents");
 
 export const eventsChanged = (callback) => {
-  Events.addEventHandler(gotEventsKey, callback);
+  events.addEventHandler(gotEventsKey, callback);
   return callback(data.events);
 };
 
@@ -17,6 +17,6 @@ export const getEvents = async () => {
   }
   const events = await response.json();
   data.events = events;
-  Events.dispatchEvent(gotEventsKey, data.events);
+  events.dispatchEvent(gotEventsKey, data.events);
   return events;
 };

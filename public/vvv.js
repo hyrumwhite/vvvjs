@@ -1,10 +1,13 @@
-export const createElement = (tag, props, children) => {
+export const createElement = (tag, props) => {
   const element = document.createElement(tag);
   element.v_listeners = [];
   let parentElement = null;
   for (let prop in props) {
     let value = props[prop];
     if (prop === "parentElement") {
+      if (typeof value === "string") {
+        value = document.querySelector(value);
+      }
       parentElement = value;
     } else if (prop === "children") {
       children = value;
@@ -16,24 +19,24 @@ export const createElement = (tag, props, children) => {
       });
     } else if (typeof value === "function") {
       element.addEventListener(prop, value);
-      element.v_listeners.push(value);
+      element.v_listeners.push({ prop, listener: value });
     } else if (prop in element) {
       element[prop] = value;
     } else {
       element.setAttribute(prop, value);
     }
-    element.v_destroy = () => {
-      element.v_listeners.forEach((listener) => {
-        element.removeEventListener(prop, listener);
-        for (let child of element.children) {
-          if (child.v_destroy) {
-            child.v_destroy();
-          }
-        }
-      });
-      element.remove();
-    };
   }
+  element.v_destroy = () => {
+    element.v_listeners?.forEach(({ prop, listener }) => {
+      element.removeEventListener(prop, listener);
+      for (let child of element.children) {
+        if (child.v_destroy) {
+          child.v_destroy();
+        }
+      }
+    });
+    element.remove();
+  };
   if (parentElement) {
     parentElement.appendChild(element);
   }
@@ -80,7 +83,7 @@ export const updateList = (list, items, { updateChild, createChild }) => {
   return list;
 };
 
-export const Events = {
+export const events = {
   keyId: 0,
   createEventKey(key) {
     return `${key}-${this.keyId++}`;
