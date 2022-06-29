@@ -1,52 +1,25 @@
-import {
-	getEvents,
-	eventsChanged,
-	state as EventState,
-} from "/store/localEvents.js";
+import { initializeRouter } from "/router.js";
+import { EventsPage } from "/pages/events.js";
+import { DirectoryPage } from "/pages/directory.js";
+import { DefaultLayout } from "/layouts/default.js";
 
-import v from "/vvv";
-const { div, button, output, h1 } = v;
-import { EventList } from "/components/EventList.js";
-import { initializeRouter, go } from "/router.js";
-
-let messageRef;
+let outlet = null;
+const layout = DefaultLayout({
+  body: [(outlet = document.createElement("div"))],
+});
+document.body.appendChild(layout);
 
 initializeRouter({
-	outlet: document.body,
-	routes: [
-		{
-			default: true,
-			component: () =>
-				div({
-					children: [
-						button({
-							textContent: "events page",
-							click() {
-								go("/events-page");
-							},
-						}),
-					],
-				}),
-		},
-		{
-			path: "/events-page",
-			component: () =>
-				div({
-					class: "test-class",
-					children: [
-						h1("Upcoming Events"),
-						button({
-							textContent: "Refresh",
-							click: getEvents,
-						}),
-						(messageRef = output()),
-						EventList(eventsChanged),
-					],
-				}),
-		},
-	],
+  outlet,
+  routes: [
+    {
+      default: true,
+      component: DirectoryPage,
+    },
+    {
+      name: "events-page",
+      path: "/events-page",
+      component: EventsPage,
+    },
+  ],
 });
-
-eventsChanged(
-	() => (messageRef.value = `Got ${EventState.totalEvents} events`)
-);

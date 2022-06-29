@@ -1,7 +1,29 @@
 import v from "/vvv";
-const { div } = v;
+const { div, h1, button, output } = v;
+import {
+  getEvents,
+  eventsChanged,
+  state as EventState,
+} from "/store/localEvents.js";
+import { EventList } from "/components/EventList.js";
 
-div({
-  parentElement: "#router-outlet",
-  textContent: "Hello World, I'm the events page",
-});
+let messageRef = null;
+
+export const EventsPage = () => {
+  let element = div({
+    class: "test-class",
+    children: [
+      h1("Upcoming Events"),
+      button({
+        textContent: "Refresh",
+        click: getEvents,
+      }),
+      (messageRef = output()),
+      EventList(eventsChanged),
+    ],
+  });
+  eventsChanged(
+    () => (messageRef.value = `Got ${EventState.totalEvents} events`)
+  );
+  return element;
+};
