@@ -1,0 +1,12 @@
+:root {
+	--base-font: 'Courier New', Courier, monospace;
+	font-family: var(--base-font);
+}
+
+main {
+	padding: 2rem;
+}
+
+header h2 {
+	margin: 0px;
+}

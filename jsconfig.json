@@ -12,6 +12,12 @@
 			"/store": [
 				"./public/store/*"
 			],
+			"/pages": [
+				"./public/pages/*"
+			],
+			"/layouts": [
+				"./public/layouts/*"
+			],
 		},
 	},
 	"exclude": [
