@@ -1,10 +1,21 @@
 export const createElement = (tag, props) => {
-  const element = document.createElement(tag);
+  const element =
+    tag === "fragment"
+      ? document.createDocumentFragment()
+      : document.createElement(tag);
+
   element.v_listeners = [];
+
   let parentElement = null;
+
+  //format params based on types
   if (typeof props == "string") {
     props = { textContent: props };
   }
+  if (props instanceof Array) {
+    props = { children: props };
+  }
+
   for (let prop in props) {
     let value = props[prop];
     if (prop === "parentElement") {
@@ -57,8 +68,6 @@ export default new Proxy(
     get(target, key) {
       if (key === "textNode") {
         return (text) => document.createTextNode(text);
-      } else if (key === "fragment") {
-        return () => document.createDocumentFragment();
       }
       return createElement.bind(null, key);
     },

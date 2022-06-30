@@ -1,33 +1,46 @@
 import v from "/vvv";
-const { div, header, main, h2 } = v;
+const { fragment, div, header, main, h2, a } = v;
+
+const Links = () =>
+  div({
+    class: "row gap-3",
+    children: [
+      a({
+        textContent: "Github",
+        href: "https://github.com/hyrumwhite",
+      }),
+      a({
+        textContent: "Twitter",
+        href: "https://twitter.com/fluffydev",
+      }),
+      a({
+        textContent: "LinkedIn",
+        href: "https://www.linkedin.com/in/hyrumswhite/",
+      }),
+    ],
+  });
 
 export const DefaultLayout = (props = {}) =>
-	div({
-		style: {
-			display: "flex",
-			flexDirection: "column",
-			height: "100%",
-		},
-		children: [
-			header({
-				style: {
-					display: "flex",
-					flex: "0 0 auto",
-					height: "56px",
-					background: "wheat",
-					alignItems: "center",
-					padding: "0px 1rem",
-				},
-				children: [h2("sethwhite.dev")],
-			}),
-			main({
-				id: "main-outlet",
-				style: {
-					display: "flex",
-					flex: "1 1 auto",
-					overflow: "auto",
-				},
-				children: props.body || [],
-			}),
-		],
-	});
+  fragment([
+    header({
+      class: "hero",
+      children: [
+        h2([
+          a({
+            textContent: "sethwhite.dev",
+            href: "/",
+          }),
+        ]),
+        Links(),
+      ],
+    }),
+    main({
+      id: "main-outlet",
+      style: {
+        display: "flex",
+        flex: "1 1 auto",
+        overflow: "auto",
+      },
+      children: props.body || [],
+    }),
+  ]);
