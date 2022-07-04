@@ -1,21 +1,21 @@
 import v from "/vvv";
 const { style, div, input } = v;
-// import {FancyInput} from "/components/FancyInput.js";
+import { FancyInput } from "/components/FancyInput.js";
 
 let firstInput = null;
 let secondInput = null;
 
 export const ShadowPage = () =>
   div({
-    shadowChildren: [
-      (firstInput = input({
+    children: [
+      (firstInput = FancyInput({
         placeholder: "Input goes here",
         value: "Im a value",
         input() {
           secondInput.value = firstInput.value;
         },
       })),
-      (secondInput = input({
+      (secondInput = FancyInput({
         placeholder: "Input goes here",
         value: "Im a value",
         input() {},

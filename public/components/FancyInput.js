@@ -1,8 +1,9 @@
 import v from "/vvv";
 const { style, span, input } = v;
 
-export const FancyInput = (props) =>
-  span({
+export const FancyInput = (props) => {
+  let inputRef = null;
+  let element = span({
     shadowChildren: [
       style({
         textContent: `
@@ -13,8 +14,18 @@ export const FancyInput = (props) =>
 				}
 			`,
       }),
-      input({
+      (inputRef = input({
         ...props,
-      }),
+      })),
     ],
   });
+  Object.defineProperty(element, "value", {
+    get() {
+      return inputRef.value;
+    },
+    set(value) {
+      inputRef.value = value;
+    },
+  });
+  return element;
+};
