@@ -1,3 +1,12 @@
+const addChildrenToElement = (element, children = []) => {
+  children.forEach((child) => {
+    if (typeof child === "string") {
+      child = document.createTextNode(child);
+    }
+    element.appendChild(child);
+  });
+};
+
 export const createElement = (tag, props) => {
   const element =
     tag === "fragment"
@@ -23,16 +32,24 @@ export const createElement = (tag, props) => {
         value = document.querySelector(value);
       }
       parentElement = value;
+    } else if (prop === "shadowHost") {
+      if (typeof value === "string") {
+        value = document.querySelector(value);
+      }
+      parentElement = value.attachShadow({
+        mode: "open",
+        delegatesFocus: value.getAttribute("delegates-focus") === "true",
+      });
     } else if (prop === "style" && typeof value == "object") {
       Object.assign(element.style, value);
     } else if (prop === "children") {
-      let children = value;
-      children.forEach((child) => {
-        if (typeof child === "string") {
-          child = document.createTextNode(child);
-        }
-        element.appendChild(child);
+      addChildrenToElement(element, value);
+    } else if (prop === "shadowChildren") {
+      let shadowRoot = element.attachShadow({
+        mode: "open",
+        delegatesFocus: props.delegatesFocus === true,
       });
+      addChildrenToElement(shadowRoot, value);
     } else if (typeof value === "function") {
       element.addEventListener(prop, value);
       element.v_listeners.push({ prop, listener: value });
