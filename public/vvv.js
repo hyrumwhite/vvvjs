@@ -40,6 +40,8 @@ export const createElement = (tag, props) => {
         mode: "open",
         delegatesFocus: value.getAttribute("delegates-focus") === "true",
       });
+    } else if (prop === "defineProperties") {
+      Object.defineProperties(element, value);
     } else if (prop === "style" && typeof value == "object") {
       Object.assign(element.style, value);
     } else if (prop === "children") {
