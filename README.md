@@ -7,27 +7,27 @@ import v from "./path/to/vvvjs/createElement.js";
 const { fragment, header, h2, a, main } = v;
 
 fragment({
-	parentElement: document.body,
-	children: [
-		header({
-			class: "hero",
-			children: [
-				h2([
-					a({
-						textContent: "sethwhite.dev",
-						href: "/",
-					}),
-				]),
-			],
-		}),
-		main({
-			id: "main-outlet",
-			style: {
-				display: "flex",
-				flex: "1 1 auto",
-				overflow: "auto",
-			},
-		}),
-	],
+  parentElement: document.body,
+  children: [
+    header({
+      class: "hero",
+      children: [
+        h2([
+          a({
+            textContent: "sethwhite.dev",
+            href: "/",
+          }),
+        ]),
+      ],
+    }),
+    main({
+      id: "main-outlet",
+      style: {
+        display: "flex",
+        flex: "1 1 auto",
+        overflow: "auto",
+      },
+    }),
+  ],
 });
 ```
