@@ -1,4 +1,4 @@
-import v from "/vvv";
+import v from "/vvv.js";
 const { div, h1 } = v;
 import { RouterLink } from "/RouterLink.js";
 
