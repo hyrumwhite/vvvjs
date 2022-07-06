@@ -13,47 +13,10 @@ const importShadowPage = async () => {
   const { ShadowPage } = await import("/pages/shadow.js");
   return ShadowPage();
 };
-
-div({
-  parentElement: document.body,
-  class: "row justify-center",
-  children: [
-    img({
-      style: { width: "100px" },
-      parentElement: document.body,
-      src: `/images/seth.svg`,
-      alt: "Picture of a person",
-    }),
-  ],
-  shadowChildren: [
-    style(`
-      /*create a keyframe to infinitely rotate*/
-      @keyframes rotate {
-        from {
-          transform: rotate(0deg);
-        }
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      /*create a class to use the keyframe*/
-      .rotate {
-        transform-origin: center 42%;
-        animation: rotate infinite 2s linear;
-      }
-      img {
-        width: 100px;
-      }
-    `),
-    img({
-      class: "rotate",
-      parentElement: document.body,
-      src: `/images/seth.svg`,
-      alt: "Picture of a person",
-    }),
-  ],
-});
+const importResumePage = async () => {
+  const { ResumePage } = await import("/pages/resume.js");
+  return ResumePage();
+};
 
 initializeRouter({
   outlet: "#main-outlet",
@@ -71,6 +34,11 @@ initializeRouter({
       name: "shadow-page",
       path: "/shadow-page",
       component: importShadowPage,
+    },
+    {
+      name: "resume-page",
+      path: "/resume-page",
+      component: importResumePage,
     },
   ],
 });

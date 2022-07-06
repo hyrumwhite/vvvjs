@@ -17,6 +17,10 @@ export const DirectoryPage = () => {
             textContent: "shadow page",
             name: "shadow-page",
           }),
+          RouterLink({
+            textContent: "resume page",
+            name: "resume-page",
+          }),
         ],
       }),
     ],
