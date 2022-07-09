@@ -5,10 +5,10 @@
 VVV.js is Virtually Vanilla Javascript. Its a collection of libraries to smooth out creating and querying elements. It's intended to be used as a zero build time tool to build simple and complex web pages and apps, but it is compatible with build tools.
 
 ```js
-import v from "./path/to/vvvjs/createElement.js";
+import v from "./path/to/vvvjs/CreateElement.js";
 const { fragment, header, h2, a, main } = v;
 
-const HomePageLink = () => 
+const HomePageLink = () =>
   h2([
     a({
       textContent: "sethwhite.dev",

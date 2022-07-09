@@ -81,17 +81,17 @@ export const createElement = (tag, props) => {
 /**
  * @type {{[key: string]: function (): HTMLElement, textNode: function (): Text}}
  */
-export default new Proxy(
-  {},
-  {
-    get(target, key) {
-      if (key === "textNode") {
-        return (text) => document.createTextNode(text);
-      }
-      return createElement.bind(null, key);
-    },
-  }
-);
+export default new Proxy(createElement, {
+  get(target, key) {
+    if (key === "textNode") {
+      return (text) => document.createTextNode(text);
+    }
+    return createElement.bind(null, key);
+  },
+  apply(target, thisArg, args) {
+    return target.apply(thisArg, args);
+  },
+});
 
 export const updateList = (list, items, { updateChild, createChild }) => {
   for (let i = 0; i < items.length; i++) {
@@ -114,29 +114,4 @@ export const updateList = (list, items, { updateChild, createChild }) => {
     }
   }
   return list;
-};
-
-export const events = {
-  keyId: 0,
-  createEventKey(key) {
-    return `${key}-${this.keyId++}`;
-  },
-  handlers: {},
-  addEventHandler(key, callback) {
-    if (!this.handlers[key]) {
-      this.handlers[key] = [];
-    }
-    this.handlers[key].push(callback);
-    return this.removeEventHandler.bind(this, key, callback);
-  },
-  removeEventHandler(key, callback) {
-    if (this.handlers[key]) {
-      this.handlers[key] = this.handlers[key].filter((cb) => cb !== callback);
-    }
-  },
-  dispatchEvent(key, data) {
-    if (this.handlers[key]) {
-      this.handlers[key].forEach((cb) => cb(data));
-    }
-  },
 };

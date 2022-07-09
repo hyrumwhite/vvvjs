@@ -7,7 +7,7 @@
 				"./public/components/*"
 			],
 			"/vvv": [
-				"./public/vvv.js"
+				"./public/vvv/*"
 			],
 			"/store": [
 				"./public/store/*"

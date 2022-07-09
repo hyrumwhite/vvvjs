@@ -1,26 +1,26 @@
-import { events } from "/vvv.js";
+import { Events } from "/vvv/Events.js";
 
 export const state = {
-	tasks: [],
+  tasks: [],
 };
 
 const taskChangedKey = events.createEventKey("tasksChanged");
 
 export const tasksChanged = (callback) => {
-	events.addEventHandler(taskChangedKey, callback);
-	//immediately handle events
-	return callback(state.tasks);
+  events.addEventHandler(taskChangedKey, callback);
+  //immediately handle events
+  return callback(state.tasks);
 };
 
 export const getTasks = () => {
-	let tasks = [];
-	try {
-		tasks = JSON.stringify(localStorage.savedTasks);
-	} catch (error) {
-		console.error(error);
-	}
-	if (tasks) {
-		state.tasks = tasks;
-	}
-	events.dispatchEvent(taskChangedKey, state.tasks);
+  let tasks = [];
+  try {
+    tasks = JSON.stringify(localStorage.savedTasks);
+  } catch (error) {
+    console.error(error);
+  }
+  if (tasks) {
+    state.tasks = tasks;
+  }
+  events.dispatchEvent(taskChangedKey, state.tasks);
 };

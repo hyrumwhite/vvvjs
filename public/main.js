@@ -1,6 +1,5 @@
-import { initializeRouter } from "/router.js";
-import v from "/vvv.js";
-const { img, div, style } = v;
+import { initializeRouter } from "/vvv/Router.js";
+
 const importEventsPage = async () => {
   const { EventsPage } = await import("/pages/events.js");
   return EventsPage();

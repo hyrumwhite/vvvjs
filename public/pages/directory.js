@@ -1,6 +1,6 @@
-import v from "/vvv.js";
+import v from "/vvv/CreateElement.js";
 const { div, h1 } = v;
-import { RouterLink } from "/RouterLink.js";
+import { RouterLink } from "/vvv/RouterLink.js";
 
 export const DirectoryPage = () => {
   return div({

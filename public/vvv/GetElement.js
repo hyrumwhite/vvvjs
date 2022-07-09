@@ -1,4 +1,3 @@
-//define a type where keys that start with $ are HTML elements
 /**
  * @typedef {`\$${string}`} StartsWithDollarSign
  */
@@ -15,10 +14,7 @@
  * @param {{emitInputOnValueChange: Boolean}} options
  * @returns {HtmlElementProxy}
  */
-export const ErgoElement = function (
-  element,
-  { emitInputOnValueChange = true } = {}
-) {
+export default function (element, { emitInputOnValueChange = true } = {}) {
   if (typeof element === "string") {
     element = document.querySelector(element);
   }
@@ -61,4 +57,4 @@ export const ErgoElement = function (
       return target.apply(thisArg, args);
     },
   });
-};
+}
