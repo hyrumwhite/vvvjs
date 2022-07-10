@@ -7,9 +7,9 @@ export const state = {
 
 const gotEventsKey = Events.createEventKey("gotEvents");
 
-export const eventsChanged = (callback) => {
-  Events.addEventListener(gotEventsKey, callback);
-  return callback(state.events);
+export const eventsChanged = (callback, options) => {
+  callback(state.events);
+  return Events.addEventListener(gotEventsKey, callback, options);
 };
 
 export const getEvents = async () => {

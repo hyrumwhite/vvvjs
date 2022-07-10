@@ -9,9 +9,8 @@ import {
 
 import { EventList } from "/components/EventList.js";
 
-let messageRef = null;
-
 export const EventsPage = () => {
+  let messageRef = null;
   let element = div({
     class: "test-class",
     children: [
@@ -25,7 +24,10 @@ export const EventsPage = () => {
     ],
   });
   eventsChanged(
-    () => (messageRef.value = `Got ${EventState.totalEvents} events`)
+    () => (messageRef.value = `Got ${EventState.totalEvents} events`),
+    {
+      destroyWhen: () => !messageRef.isConnected,
+    }
   );
   return element;
 };

@@ -47,7 +47,14 @@ const newEventList = ({ parent, events = [], eventList }) => {
  * @returns {HTMLElement}
  */
 export const EventList = (onEventsChange) => {
-  let eventList = null;
-  eventList = onEventsChange((events) => newEventList({ events, eventList }));
+  let eventList = newEventList({ events: [], eventList: null });
+  onEventsChange(
+    (events) => {
+      newEventList({ events, eventList });
+    },
+    {
+      destroyWhen: () => !eventList.isConnected,
+    }
+  );
   return eventList;
 };

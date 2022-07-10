@@ -6,16 +6,16 @@
 			"/components/*": [
 				"./public/components/*"
 			],
-			"/vvv": [
+			"/vvv/*": [
 				"./public/vvv/*"
 			],
-			"/store": [
+			"/store/*": [
 				"./public/store/*"
 			],
-			"/pages": [
+			"/pages/*": [
 				"./public/pages/*"
 			],
-			"/layouts": [
+			"/layouts/*": [
 				"./public/layouts/*"
 			],
 		},
