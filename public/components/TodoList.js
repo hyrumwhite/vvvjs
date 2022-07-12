@@ -1,5 +1,5 @@
 import v, { updateList } from "/vvv/CreateElement.js";
-const { div, ul, input, label, button } = v;
+const { li, ul, input, label, button } = v;
 import $ from "/vvv/GetElement.js";
 
 import { saveTodos, todosChanged, state } from "/store/todos.js";
@@ -26,7 +26,7 @@ export const TodoList = () => {
       },
     });
 
-    return div({
+    return li({
       class: "row align-center",
       children: [
         label({
