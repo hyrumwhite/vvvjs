@@ -21,6 +21,10 @@ export const DirectoryPage = () => {
             textContent: "resume page",
             name: "resume-page",
           }),
+          RouterLink({
+            textContent: "todo page",
+            name: "todo-page",
+          }),
         ],
       }),
     ],

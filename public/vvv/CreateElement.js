@@ -98,9 +98,9 @@ export const updateList = (list, items, { updateChild, createChild }) => {
     let item = items[i];
     let listItem = list.children[i];
     if (listItem && updateChild) {
-      updateChild(listItem, item);
+      updateChild(listItem, item, i);
     } else if (createChild) {
-      listItem = createChild(item);
+      listItem = createChild(item, i);
       list.appendChild(listItem);
     }
   }

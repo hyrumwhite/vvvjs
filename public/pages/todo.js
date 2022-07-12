@@ -1,42 +1,37 @@
 import v from "/vvv/CreateElement.js";
-const { div, span, input } = v;
-import {
-  addTask,
-  getTasks,
-  saveTasks,
-  tasksChanged,
-  state,
-} from "/store/tasks.js";
-
+const { div, span, input, label } = v;
+import { getTodos, saveTodos, todosChanged, state } from "/store/todos.js";
+import { TodoList } from "/components/TodoList";
 export const TodoPage = () => {
-  getTasks();
+  getTodos();
 
   const MainInput = input({
     keydown($event) {
       if ($event.key === "Enter") {
-        addTask(mainInput.value);
-        mainInput.value = "";
+        saveTodos({ text: MainInput.value, done: false });
+        MainInput.value = "";
       }
     },
   });
 
-  const TaskCount = span();
-
-  tasksChanged(
-    () => (TaskCount.textContent = `Total tasks: ${state.tasks.length}`)
+  const TodosCount = span();
+  todosChanged(
+    () => (TodosCount.textContent = `Total todos: ${state.todos.length}`),
+    { removeWhen: () => !TodosCount.isConnected }
   );
 
   return div({
-    class: "grow column",
+    class: "grow column align-center",
     style: { alignSelf: "center", width: "min(800px, 100%)" },
     children: [
       div({
         class: "row align-center",
         children: [
           label({ textContent: "Enter a todo:", children: [MainInput] }),
-          TaskCount,
+          TodosCount,
         ],
       }),
+      TodoList(),
     ],
   });
 };

@@ -78,7 +78,9 @@ const handleURLChange = async () => {
       element = await element;
     }
     currentOutlet.innerHTML = "";
-    currentOutlet.appendChild(element);
+    if (element instanceof Element) {
+      currentOutlet.appendChild(element);
+    }
 
     if (matchingRoute.after) {
       await matchingRoute.after(guardPayload);

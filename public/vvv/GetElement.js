@@ -14,7 +14,10 @@
  * @param {{emitInputOnValueChange: Boolean}} options
  * @returns {HtmlElementProxy}
  */
-export default function (element, { emitInputOnValueChange = true } = {}) {
+export default function ErgoElement(
+  element,
+  { emitInputOnValueChange = true } = {}
+) {
   if (typeof element === "string") {
     element = document.querySelector(element);
   }

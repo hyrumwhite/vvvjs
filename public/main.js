@@ -16,6 +16,13 @@ const importResumePage = async () => {
   const { ResumePage } = await import("/pages/resume.js");
   return ResumePage();
 };
+const importTodoPage = async () => {
+  const { TodoPage } = await import("/pages/todo.js");
+  return TodoPage();
+};
+const importGamePage = async () => {
+  await import("/pages/game.js");
+};
 
 initializeRouter({
   outlet: "#main-outlet",
@@ -38,6 +45,16 @@ initializeRouter({
       name: "resume-page",
       path: "/resume-page",
       component: importResumePage,
+    },
+    {
+      name: "todo-page",
+      path: "/todo-page",
+      component: importTodoPage,
+    },
+    {
+      name: "game-page",
+      path: "/game",
+      component: importGamePage,
     },
   ],
 });

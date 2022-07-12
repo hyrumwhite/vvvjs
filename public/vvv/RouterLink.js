@@ -9,7 +9,6 @@ import { go, insertParamsIntoPath, getRoutes } from "./Router.js";
 export const RouterLink = (props) => {
   if (props.name) {
     let routes = getRoutes();
-    console.log(routes);
     props.to = routes.find((route) => route.name === props.name).path;
   }
   return CreateElement("a", {

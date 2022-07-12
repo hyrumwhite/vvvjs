@@ -54,4 +54,4 @@ app.get("*", servePublicFiles);
 
 app.listen(PORT);
 //log link to server
-console.log(`Server running at http://localhost:${PORT}`);
+console.info(`Server running at http://localhost:${PORT}`);
