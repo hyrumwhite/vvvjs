@@ -1,12 +1,10 @@
-export const DefaultLayout = ({ head, body }) => {
-  return /*html*/ `
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Test Bed</title>
 		<script src="./main.js" type="module"></script>
 		<style>
 			html,
@@ -17,7 +15,10 @@ export const DefaultLayout = ({ head, body }) => {
 			}
 		</style>
 		<link rel="stylesheet" href="global.css" />
-		${head}
+		
+	<title>Dad Jokes</title>
+	<script src="/pages/jokes.js" type="module"></script>
+
 	</head>
 	<body>
 		<header class="hero">
@@ -29,8 +30,10 @@ export const DefaultLayout = ({ head, body }) => {
 			</div>
 		</header>
 		<main id="main-outlet" class="column">
-			${body}
+			
+	<h2>The best dad jokes on  the internet</h2>
+	<button>Get a joke</button>
+
 		</main>
 	</body>
-</html>`;
-};
+</html>

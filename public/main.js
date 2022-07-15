@@ -28,7 +28,7 @@ initializeRouter({
   outlet: "#main-outlet",
   routes: [
     {
-      default: true,
+      // default: true,
       component: importDirectoryPage,
     },
     {

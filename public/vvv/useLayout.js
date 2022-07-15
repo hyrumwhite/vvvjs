@@ -4,7 +4,7 @@
  * @param {string} template - the template html
  * @returns
  */
-const useLayout = (layoutFn, template) => {
+export const useLayout = (layoutFn, template) => {
   //get contents of <head> from template
   const [, head] = template.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
   //get contents of body from template

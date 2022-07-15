@@ -8,10 +8,14 @@ const addChildrenToElement = (element, children = []) => {
 };
 
 export const createElement = (tag, props) => {
-  const element =
-    tag === "fragment"
-      ? document.createDocumentFragment()
-      : document.createElement(tag);
+  let element = null;
+  if (tag instanceof Element) {
+    element = tag;
+  } else if (tag == "fragment") {
+    element = document.createDocumentFragment();
+  } else {
+    element = document.createElement(tag);
+  }
 
   element.v_listeners = [];
 

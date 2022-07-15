@@ -1,8 +1,16 @@
-const [, , PORT = 3334] = process.argv;
-const { fakeEventList } = require("./fake-event-list");
-const fs = require("fs/promises");
-const pureHttp = require("pure-http");
+import { fakeEventList } from "./fake-event-list.js";
+import fs from "fs/promises";
+import pureHttp from "pure-http";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+const __dirname = dirname(fileURLToPath(import.meta.url));
+import { createPages } from "./public/vvv/createPages.js";
+import { DefaultLayout } from "./islands/layouts/default.js";
+createPages("./islands/pages", "./public", DefaultLayout);
+
 const app = pureHttp();
+
+const [, , PORT = 3334] = process.argv;
 
 //servce static files in the public directory
 const servePublicFiles = async (req, res) => {
