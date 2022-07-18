@@ -3,7 +3,7 @@ const { img } = v;
 
 let button = document.getElementById("get-cats-button");
 let display = img({
-  style: { width: "300px" },
+  style: { width: "700px" },
   parentElement: button.parentElement,
 });
 

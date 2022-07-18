@@ -23,6 +23,10 @@ const importTodoPage = async () => {
 const importGamePage = async () => {
   await import("/pages/game.js");
 };
+const importCatPicsPage = async () => {
+  const { CatPicsPage } = await import("/pages/CatPicsPage.js");
+  return CatPicsPage();
+};
 
 initializeRouter({
   outlet: "#main-outlet",
@@ -55,6 +59,11 @@ initializeRouter({
       name: "game-page",
       path: "/game",
       component: importGamePage,
+    },
+    {
+      name: "cat-pics",
+      path: "/cats.html",
+      component: importCatPicsPage,
     },
   ],
 });

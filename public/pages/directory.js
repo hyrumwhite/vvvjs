@@ -25,6 +25,10 @@ export const DirectoryPage = () => {
             textContent: "todo page",
             name: "todo-page",
           }),
+          RouterLink({
+            textContent: "cat pics",
+            name: "cat-pics",
+          }),
         ],
       }),
     ],
