@@ -1,9 +1,29 @@
 {
+  "name": "vvvjs",
+  "version": "1.0.0",
+  "description": "A small, zero-build library that uses native-inspired apis to add dynamic functionality to webpages",
+  "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "test": "test"
   },
-  "type":"module",
-  "dependencies": {
-    "pure-http": "^3.3.1"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyrumwhite/vvvjs.git"
+  },
+  "keywords": [
+    "js",
+    "vanilla",
+    "zero-build",
+    "vvv",
+    "vvvjs"
+  ],
+  "author": "hyrumwhite",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hyrumwhite/vvvjs/issues"
+  },
+  "homepage": "https://github.com/hyrumwhite/vvvjs#readme",
+  "devDependencies": {
+    "esbuild": "^0.14.51"
   }
 }

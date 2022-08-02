@@ -14,7 +14,7 @@
  * @param {{emitInputOnValueChange: Boolean}} options
  * @returns {HtmlElementProxy}
  */
-export default function ErgoElement(
+export const getElement = function (
   element,
   { emitInputOnValueChange = true } = {}
 ) {
@@ -22,21 +22,21 @@ export default function ErgoElement(
     element = document.querySelector(element);
   }
 
-  function getElement(selector) {
+  function selectElement(selector) {
     if (selector.startsWith("$$")) {
       let results = element.querySelectorAll(selector.substring(2));
       let elements = [];
       for (let result of results) {
-        elements.push(ErgoElement(result));
+        elements.push(getElement(result));
       }
       return elements;
     } else if (selector.startsWith("$")) {
       let result = element.querySelector(selector.substring(1));
-      return ErgoElement(result) || null;
+      return getElement(result) || null;
     }
   }
 
-  return new Proxy(getElement, {
+  return new Proxy(selectElement, {
     get(target, prop, receiver) {
       let value = element[prop];
       if (prop === "$el") {
@@ -60,4 +60,4 @@ export default function ErgoElement(
       return target.apply(thisArg, args);
     },
   });
-}
+};

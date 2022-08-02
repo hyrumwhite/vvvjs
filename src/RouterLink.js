@@ -1,4 +1,4 @@
-import CreateElement from "./CreateElement.js";
+import createElement from "./CreateElement.js";
 import { go, insertParamsIntoPath, getRoutes } from "./Router.js";
 
 /**
@@ -11,7 +11,7 @@ export const RouterLink = (props) => {
     let routes = getRoutes();
     props.to = routes.find((route) => route.name === props.name).path;
   }
-  return CreateElement("a", {
+  return createElement("a", {
     ...props,
     href: insertParamsIntoPath(props.to, props.params),
     click($event) {

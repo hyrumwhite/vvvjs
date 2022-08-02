@@ -133,6 +133,13 @@ export const initializeRouter = ({
 
   return handleURLChange();
 };
+/**
+ * add a route to the router after setup
+ * @param {Route[]} newRoutes
+ */
+export const addRoutes = (newRoutes) => {
+  routes = [...routes, ...newRoutes];
+};
 
 export const insertParamsIntoPath = (path, params) => {
   if (params) {
@@ -150,7 +157,7 @@ export const go = (arg) => {
   if (typeof arg === "string") {
     arg = { path: arg };
   }
-  const { path, name, params, query, delta } = arg;
+  let { path, name, params, query, delta, replace } = arg;
   if (delta) {
     return window.history.go(delta);
   }
@@ -165,12 +172,17 @@ export const go = (arg) => {
   if (query) {
     url += new URLSearchParams(query).toString();
   }
-  window.history.pushState({}, "", url);
+  if (replace) {
+    window.history.replaceState(null, "", url);
+  } else {
+    window.history.pushState(null, "", url);
+  }
   return handleURLChange();
 };
 
 export const back = (delta = -1) => go({ delta });
 export const forward = (delta = 1) => go({ delta });
+export const replace = (...params) => go({ replace: true, ...params });
 export const getRoutes = () => routes;
 
 //TODO: add replace
