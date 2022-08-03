@@ -1,47 +1,3 @@
-// src/GetElement.js
-function getElement(element, { emitInputOnValueChange = true } = {}) {
-  if (typeof element === "string") {
-    element = document.querySelector(element);
-  }
-  function selectElement(selector) {
-    if (selector.startsWith("$$")) {
-      let results = element.querySelectorAll(selector.substring(2));
-      let elements = [];
-      for (let result of results) {
-        elements.push(getElement(result));
-      }
-      return elements;
-    } else if (selector.startsWith("$")) {
-      let result = element.querySelector(selector.substring(1));
-      return getElement(result) || null;
-    }
-  }
-  return new Proxy(selectElement, {
-    get(target, prop, receiver) {
-      let value = element[prop];
-      if (prop === "$el") {
-        return element;
-      } else if (typeof value === "function") {
-        return value.bind(element);
-      } else if (prop in element) {
-        return element[prop];
-      } else if (prop.startsWith("$")) {
-        return target(prop);
-      }
-    },
-    set(target, prop, value) {
-      element[prop] = value;
-      if (prop === "value" && emitInputOnValueChange) {
-        element.dispatchEvent(new CustomEvent("input", { detail: value }));
-      }
-      return true;
-    },
-    apply(target, thisArg, args) {
-      return target.apply(thisArg, args);
-    }
-  });
-}
-
 // src/CreateElement.js
 var addChildrenToElement = (element, children = []) => {
   for (let child of children) {
@@ -134,6 +90,50 @@ var CreateElement_default = new Proxy(createElement, {
   }
 });
 
+// src/GetElement.js
+var getElement = function(element, { emitInputOnValueChange = true } = {}) {
+  if (typeof element === "string") {
+    element = document.querySelector(element);
+  }
+  function selectElement(selector) {
+    if (selector.startsWith("$$")) {
+      let results = element.querySelectorAll(selector.substring(2));
+      let elements = [];
+      for (let result of results) {
+        elements.push(getElement(result));
+      }
+      return elements;
+    } else if (selector.startsWith("$")) {
+      let result = element.querySelector(selector.substring(1));
+      return getElement(result) || null;
+    }
+  }
+  return new Proxy(selectElement, {
+    get(target, prop, receiver) {
+      let value = element[prop];
+      if (prop === "$el") {
+        return element;
+      } else if (typeof value === "function") {
+        return value.bind(element);
+      } else if (prop in element) {
+        return element[prop];
+      } else if (prop.startsWith("$")) {
+        return target(prop);
+      }
+    },
+    set(target, prop, value) {
+      element[prop] = value;
+      if (prop === "value" && emitInputOnValueChange) {
+        element.dispatchEvent(new CustomEvent("input", { detail: value }));
+      }
+      return true;
+    },
+    apply(target, thisArg, args) {
+      return target.apply(thisArg, args);
+    }
+  });
+};
+
 // src/EventBus.js
 var eventBus = {
   keyId: 0,
@@ -167,48 +167,6 @@ var eventBus = {
       this.handlers[key].forEach((cb) => cb(data));
     }
   }
-};
-
-// src/FetchHtml.js
-var defaultHeadNodeFilter = ["STYLE", "SCRIPT", "LINK"];
-var fetchHtml = async (urlWithHash, fetchParams = {}, { headNodeFilter, replaceTitle = true, bodyElementSelector = null } = {}) => {
-  const [url, selector] = urlWithHash.split("#");
-  if (selector && bodyElementSelector === null) {
-    bodyElementSelector = `#${selector}`;
-  }
-  headNodeFilter = headNodeFilter || defaultHeadNodeFilter;
-  let response = await fetch(url, fetchParams);
-  if (response.ok) {
-    let template = await response.text();
-    let domParser = new DOMParser();
-    template = domParser.parseFromString(template, "text/html");
-    let head = template.querySelector("head") || document.createDocumentFragment();
-    let body2 = template.querySelector("body") || document.createDocumentFragment();
-    if (bodyElementSelector) {
-      body2 = body2.querySelector(bodyElementSelector);
-    }
-    for (let element of head.children) {
-      if (element.nodeName === "TITLE" && replaceTitle) {
-        document.title = element.textContent;
-      } else if (headNodeFilter == null || headNodeFilter.includes(element.nodeName)) {
-        let src = element.getAttribute("src");
-        let href = element.getAttribute("src");
-        if (document.head.querySelector(`[src="${src}"]`) == null) {
-          let script = document.createElement("script");
-          for (let attribute of element.attributes) {
-            script.setAttribute(attribute.name, attribute.value);
-          }
-          document.head.appendChild(script);
-        }
-      } else {
-        let href = element.getAttribute("href");
-        if (document.head.querySelector(`[href="${href}"]`) == null) {
-          document.head.appendChild(element);
-        }
-      }
-    }
-  }
-  return body;
 };
 
 // src/Router.js
@@ -310,6 +268,9 @@ var initializeRouter = ({
   window.addEventListener("popstate", handleURLChange);
   return handleURLChange();
 };
+var addRoutes = (newRoutes) => {
+  routes = [...routes, ...newRoutes];
+};
 var insertParamsIntoPath = (path, params) => {
   if (params) {
     path = path.replace(/:([^/]+)/g, (match, key) => params[key]);
@@ -347,15 +308,33 @@ var forward = (delta = 1) => go({ delta });
 var replace = (...params) => go({ replace: true, ...params });
 var getRoutes = () => routes;
 
+// src/RouterLink.js
+var RouterLink = (props) => {
+  if (props.name) {
+    let routes2 = getRoutes();
+    props.to = routes2.find((route) => route.name === props.name).path;
+  }
+  return CreateElement_default("a", {
+    ...props,
+    href: insertParamsIntoPath(props.to, props.params),
+    click($event) {
+      $event.preventDefault();
+      props.click?.($event);
+      go(props.to, props.params);
+    }
+  });
+};
+
 // src/index.js
-var getElement2 = getElement;
+var createElement2 = CreateElement_default;
 export {
+  RouterLink,
+  addRoutes,
   back,
-  createElement,
+  createElement2 as createElement,
   eventBus,
-  fetchHtml,
   forward,
-  getElement2 as getElement,
+  getElement,
   getRoutes,
   go,
   initializeRouter,
