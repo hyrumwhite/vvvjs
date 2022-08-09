@@ -2,17 +2,22 @@
 
 # VVV.js
 
-VVV.js is Virtually Vanilla Javascript. Its a collection of libraries to smooth out creating and querying elements. It's intended to be used as a zero build time tool to build simple and complex web pages and apps, but it is compatible with build tools.
+VVVjs is Virtually Vanilla Javascript. It includes libraries that smooth out creating and querying elements, a light router and a simple event bus. Combined together, VVVjs can be used as a framework for SPA's and MPA's.
+
+# createElement
 
 ```js
-import v from "./path/to/vvvjs/CreateElement.js";
-const { fragment, header, h2, a, main } = v;
+import createElement from "vvvjs";
+const { fragment, header, h2, a, main } = createElement;
 
 const HomePageLink = () =>
   h2([
     a({
       textContent: "sethwhite.dev",
       href: "/",
+      click($event) {
+        console.log("heading home!");
+      },
     }),
   ]);
 
@@ -34,3 +39,21 @@ fragment({
   ],
 });
 ```
+
+# getElement
+
+```js
+import { getElement } from "vvvjs";
+
+const main = getElement("#main-outlet");
+
+main.$div.style.backgroundColor = "red";
+
+main.$$input.forEach((input) => (input.style.backgroundColor = "blue"));
+
+main["$#footer > select"].$option[0].setAttribute("selected", true);
+```
+
+# Router
+
+# Event Bus
