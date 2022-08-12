@@ -6,9 +6,12 @@ const addChildrenToElement = (element, children = []) => {
     element.appendChild(child);
   }
 };
+/**
+ * @typedef {import('./html-tag-type').HTMLElementOptions} HTMLElementOptions
+ */
 
 /**
- * @typedef {(string: string, properties: {[key: string]: any}) => HTMLElement} CreateElement
+ * @typedef {function(import('./html-tag-type').HTMLNodeName, HTMLElementOptions): HTMLElement} CreateElement
  */
 
 /**
@@ -44,14 +47,6 @@ export const createElement = (tag, props) => {
         value = document.querySelector(value);
       }
       parentElement = value;
-    } else if (prop === "shadowHost") {
-      if (typeof value === "string") {
-        value = document.querySelector(value);
-      }
-      parentElement = value.attachShadow({
-        mode: "open",
-        delegatesFocus: value.getAttribute("delegates-focus") === "true",
-      });
     } else if (prop === "defineProperties") {
       Object.defineProperties(element, value);
     } else if (prop === "style" && typeof value == "object") {
@@ -65,7 +60,17 @@ export const createElement = (tag, props) => {
       });
       addChildrenToElement(shadowRoot, value);
     } else if (typeof value === "function") {
-      element.addEventListener(prop, value);
+      let [eventName, ...options] = prop.split(".");
+      let eventOptions = {};
+      for (let option of options) {
+        eventOptions[option] = true;
+      }
+      element.addEventListener(
+        eventName,
+        value,
+        eventOptions,
+        options.includes("capture")
+      );
       element.v_listeners.push({ prop, listener: value });
     } else if (prop in element) {
       element[prop] = value;
