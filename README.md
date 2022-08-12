@@ -45,20 +45,22 @@ fragment({
 createElement is a proxied function. This means it can be invoked directly `createElement('div', options)` or it can be 'destructured' into functions bound to the desired prop name.
 
 ```js
-import createElement from  "vvvjs";
+import createElement from "vvvjs";
 
-const helloWorldBanner = createElement("marquee', {textContent: 'Hello World!'})
+const helloWorldBanner = createElement("marquee", {
+	textContent: "Hello World!",
+});
 
 //is the same as
 
-const {marquee} = createElement;
-const hiWorldBanner = marquee({textContent: 'Hi world!'})
+const { marquee } = createElement;
+const hiWorldBanner = marquee({ textContent: "Hi world!" });
 ```
 
 Because of proxy traps, the destructured prop can be any valid html tag name.
 
 ```js
-const { [epic - element]: epicElement } = createElement;
+const { ["epic-element"]: epicElement } = createElement;
 const mythicElement = createElement["mythic-element"]; //also a valid way to create the element function
 ```
 
