@@ -1,3 +1,43 @@
+var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
+var __async = (__this, __arguments, generator) => {
+  return new Promise((resolve, reject) => {
+    var fulfilled = (value) => {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var rejected = (value) => {
+      try {
+        step(generator.throw(value));
+      } catch (e) {
+        reject(e);
+      }
+    };
+    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
+    step((generator = generator.apply(__this, __arguments)).next());
+  });
+};
+
 // src/CreateElement.js
 var addChildrenToElement = (element, children = []) => {
   for (let child of children) {
@@ -31,14 +71,6 @@ var createElement = (tag, props) => {
         value = document.querySelector(value);
       }
       parentElement = value;
-    } else if (prop === "shadowHost") {
-      if (typeof value === "string") {
-        value = document.querySelector(value);
-      }
-      parentElement = value.attachShadow({
-        mode: "open",
-        delegatesFocus: value.getAttribute("delegates-focus") === "true"
-      });
     } else if (prop === "defineProperties") {
       Object.defineProperties(element, value);
     } else if (prop === "style" && typeof value == "object") {
@@ -52,7 +84,17 @@ var createElement = (tag, props) => {
       });
       addChildrenToElement(shadowRoot, value);
     } else if (typeof value === "function") {
-      element.addEventListener(prop, value);
+      let [eventName, ...options] = prop.split(".");
+      let eventOptions = {};
+      for (let option of options) {
+        eventOptions[option] = true;
+      }
+      element.addEventListener(
+        eventName,
+        value,
+        eventOptions,
+        options.includes("capture")
+      );
       element.v_listeners.push({ prop, listener: value });
     } else if (prop in element) {
       element[prop] = value;
@@ -194,7 +236,7 @@ var checkForRouteMatch = (path, route = "") => {
   }
   return { match: true, params };
 };
-var handleURLChange = async () => {
+var handleURLChange = () => __async(void 0, null, function* () {
   const path = window.location.pathname;
   const queryParams = Object.fromEntries(
     new URLSearchParams(window.location.search)
@@ -206,7 +248,7 @@ var handleURLChange = async () => {
       matchingRoute = route;
     }
     let { match, params } = checkForRouteMatch(path, route.path);
-    matchingRouteParams = { ...queryParams, ...params };
+    matchingRouteParams = __spreadValues(__spreadValues({}, queryParams), params);
     if (match) {
       matchingRoute = route;
       break;
@@ -220,10 +262,10 @@ var handleURLChange = async () => {
       query: queryParams
     };
     if (beforeEach) {
-      await beforeEach(guardPayload);
+      yield beforeEach(guardPayload);
     }
     if (matchingRoute.before) {
-      await matchingRoute.before(guardPayload);
+      yield matchingRoute.before(guardPayload);
     }
     let { component, outlet } = matchingRoute;
     outlet = outlet || currentOutlet;
@@ -232,22 +274,22 @@ var handleURLChange = async () => {
     }
     let element = component(matchingRouteParams);
     if (element instanceof Promise) {
-      element = await element;
+      element = yield element;
     }
     currentOutlet.innerHTML = "";
     if (element instanceof Element) {
       currentOutlet.appendChild(element);
     }
     if (matchingRoute.after) {
-      await matchingRoute.after(guardPayload);
+      yield matchingRoute.after(guardPayload);
     }
     if (afterEach) {
-      await afterEach(guardPayload);
+      yield afterEach(guardPayload);
     }
   } else {
     console.warn('no matching route for "' + path + '"');
   }
-};
+});
 var routes = [];
 var currentOutlet = null;
 var beforeEach = null;
@@ -305,7 +347,7 @@ var go = (arg) => {
 };
 var back = (delta = -1) => go({ delta });
 var forward = (delta = 1) => go({ delta });
-var replace = (...params) => go({ replace: true, ...params });
+var replace = (...params) => go(__spreadValues({ replace: true }, params));
 var getRoutes = () => routes;
 
 // src/RouterLink.js
@@ -314,24 +356,26 @@ var RouterLink = (props) => {
     let routes2 = getRoutes();
     props.to = routes2.find((route) => route.name === props.name).path;
   }
-  return CreateElement_default("a", {
-    ...props,
+  return CreateElement_default("a", __spreadProps(__spreadValues({}, props), {
     href: insertParamsIntoPath(props.to, props.params),
     click($event) {
+      var _a;
       $event.preventDefault();
-      props.click?.($event);
+      (_a = props.click) == null ? void 0 : _a.call(props, $event);
       go(props.to, props.params);
     }
-  });
+  }));
 };
 
 // src/index.js
+var src_default = CreateElement_default;
 var createElement2 = CreateElement_default;
 export {
   RouterLink,
   addRoutes,
   back,
   createElement2 as createElement,
+  src_default as default,
   eventBus,
   forward,
   getElement,
