@@ -6,6 +6,19 @@ VVVjs is Virtually Vanilla Javascript. It includes libraries that smooth out cre
 
 **Note:** This library does not include reactivity. 
 
+# Installation
+With bundling:
+`npm i vvvjs`
+
+For native esm
+
+`npx degit github:hyrumwhite/vvvjs/dist/vvv-native-minified ./vvvjs`
+
+or
+
+`npx degit github:hyrumwhite/vvvjs/dist/vvv-native ./vvvjs`
+
+then set up serving the folder as needed
 # createElement
 
 ```js
