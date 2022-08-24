@@ -1,8 +1,8 @@
 {
   "name": "vvvjs",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "A small library that uses native-inspired apis to add dynamic functionality to webpages",
-  "main": "src/index.js",
+  "main": "./dist/module.js",
   "scripts": {
     "test": "test"
   },

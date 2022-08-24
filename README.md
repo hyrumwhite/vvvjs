@@ -1,4 +1,4 @@
-# Note: Documentation is still being created for this project
+# Note: Still testing the bundling methods for this package. Will stabilize soon. Documentation is still being created for this project.
 
 # VVV.js
 
@@ -13,32 +13,32 @@ import createElement from "vvvjs";
 const { fragment, header, h2, a, main } = createElement;
 
 const HomePageLink = () =>
-  h2([
-    a({
-      textContent: "sethwhite.dev",
-      href: "/",
-      click($event) {
-        console.log("heading home!");
-      },
-    }),
-  ]);
+	h2([
+		a({
+			textContent: "sethwhite.dev",
+			href: "/",
+			click($event) {
+				console.log("heading home!");
+			},
+		}),
+	]);
 
 fragment({
-  parentElement: document.body,
-  children: [
-    header({
-      class: "hero",
-      children: [HomePageLink()],
-    }),
-    main({
-      id: "main-outlet",
-      style: {
-        display: "flex",
-        flex: "1 1 auto",
-        overflow: "auto",
-      },
-    }),
-  ],
+	parentElement: document.body,
+	children: [
+		header({
+			class: "hero",
+			children: [HomePageLink()],
+		}),
+		main({
+			id: "main-outlet",
+			style: {
+				display: "flex",
+				flex: "1 1 auto",
+				overflow: "auto",
+			},
+		}),
+	],
 });
 ```
 
@@ -47,7 +47,7 @@ fragment({
 createElement is a proxied function. This means it can be invoked directly `createElement('div', options)` or it can be 'destructured' into functions bound to the desired prop name.
 
 ```js
-import createElement from  "vvvjs";
+import createElement from "vvvjs";
 
 const banner = createElement('marquee', {textContent: 'we are the hollow men'})
 

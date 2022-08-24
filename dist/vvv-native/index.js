@@ -1,4 +1,5 @@
 import v from "./CreateElement.js";
+export default v;
 export const createElement = v;
 export { getElement } from "./GetElement.js";
 export { eventBus } from "./EventBus.js";
