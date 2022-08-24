@@ -13,32 +13,32 @@ import createElement from "vvvjs";
 const { fragment, header, h2, a, main } = createElement;
 
 const HomePageLink = () =>
-	h2([
-		a({
-			textContent: "sethwhite.dev",
-			href: "/",
-			click($event) {
-				console.log("heading home!");
-			},
-		}),
-	]);
+  h2([
+    a({
+      textContent: "sethwhite.dev",
+      href: "/",
+      click($event) {
+        console.log("heading home!");
+      },
+    }),
+  ]);
 
 fragment({
-	parentElement: document.body,
-	children: [
-		header({
-			class: "hero",
-			children: [HomePageLink()],
-		}),
-		main({
-			id: "main-outlet",
-			style: {
-				display: "flex",
-				flex: "1 1 auto",
-				overflow: "auto",
-			},
-		}),
-	],
+  parentElement: document.body,
+  children: [
+    header({
+      class: "hero",
+      children: [HomePageLink()],
+    }),
+    main({
+      id: "main-outlet",
+      style: {
+        display: "flex",
+        flex: "1 1 auto",
+        overflow: "auto",
+      },
+    }),
+  ],
 });
 ```
 
