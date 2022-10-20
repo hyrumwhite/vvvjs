@@ -188,14 +188,29 @@ const wrapper = div([
 ```js
 import { getElement } from "vvvjs";
 
-const main = getElement("#main-outlet");
+const main = getElement("main");
 
 main.$div.style.backgroundColor = "red";
 
 main.$$input.forEach((input) => (input.style.backgroundColor = "blue"));
 
-main["$#footer > select"].$option[0].setAttribute("selected", true);
+main.$$span?.forEach((span) => (span.$b.textContent = "beam me up scotty"));
+
+main["$#footer > select"].$option.setAttribute("selected", true);
 ```
+getElement uses syntax inspired by browser consoles to make querying elements simple and intuitive
+
+*** getElement ***
+getElement can be passed a selector or an element. It returns an element proxy. Normal operations can be executed on the proxy, but it also provides three special keys.
+
+*** ['${selector}'] ***
+If a key starts with a dollar sign, the proxy will pass the value after the '$' as an argument to a `querySelector` call run on the proxied element. This can be in a .$key format or a ['$.some .selector'] format. A getElement proxy will be returned.
+
+*** ['$${selector}'] ***
+This does the same as `${selector}`, but calls `querySelectorAll` using the given value and returns an array of getElement proxies.
+
+*** ['$el'] ***
+Returns the HTML Element that is being proxied
 
 # Router
 
